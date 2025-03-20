@@ -7,19 +7,37 @@ import 'package:klontong_flutter_app/logic/product/product_cubit.dart';
 import 'package:klontong_flutter_app/presentation/widgets/loading_widget.dart';
 import 'package:klontong_flutter_app/presentation/widgets/product_item.dart';
 
-class ProductListPage extends StatelessWidget {
+class ProductListPage extends StatefulWidget {
   const ProductListPage({super.key});
+
+  @override
+  State<ProductListPage> createState() => _ProductListPageState();
+}
+
+class _ProductListPageState extends State<ProductListPage> {
+  String _searchQuery = "";
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Products"),
+        title: TextField(
+          decoration: const InputDecoration(
+            hintText: "Search Products...",
+            border: InputBorder.none,
+            hintStyle: TextStyle(color: Colors.white70),
+          ),
+          style: const TextStyle(color: Colors.white),
+          onChanged: (query) {
+            setState(() {
+              _searchQuery = query.toLowerCase();
+            });
+          },
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () {
-              // Add your logout logic here
               context.read<AuthCubit>().logout();
               Navigator.pushReplacementNamed(context, RouteConstants.login);
             },
@@ -31,13 +49,18 @@ class ProductListPage extends StatelessWidget {
           if (state is ProductLoading) {
             return LoadingWidget();
           } else if (state is ProductLoaded) {
-            if (state.products.isEmpty) {
-              return const Center(child: Text("No Products Available"));
+            final filteredProducts = state.products
+                .where((product) =>
+                    product.name!.toLowerCase().contains(_searchQuery))
+                .toList();
+
+            if (filteredProducts.isEmpty) {
+              return const Center(child: Text("No Products Found"));
             }
             return ListView.builder(
-              itemCount: state.products.length,
+              itemCount: filteredProducts.length,
               itemBuilder: (context, index) {
-                final product = state.products[index];
+                final product = filteredProducts[index];
 
                 return ProductItem(
                   product: product,
