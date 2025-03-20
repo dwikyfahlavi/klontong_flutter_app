@@ -9,7 +9,7 @@ import 'package:klontong_flutter_app/presentation/pages/login_gate.dart';
 import 'package:klontong_flutter_app/presentation/pages/not_found_page.dart';
 import 'package:klontong_flutter_app/presentation/pages/product/add_product.dart';
 import 'package:klontong_flutter_app/presentation/pages/product/product_detail.dart';
-import 'package:klontong_flutter_app/presentation/pages/product_list.dart';
+import 'package:klontong_flutter_app/presentation/pages/product/product_list.dart';
 import 'package:klontong_flutter_app/presentation/pages/register.dart';
 import 'package:klontong_flutter_app/presentation/pages/splash_screen.dart';
 
